@@ -13,34 +13,34 @@ class Lexer():
         self.lexer.add('AND', r'\&')
         self.lexer.add('OR', r'\|')
         self.lexer.add('NOT', r'\!')
-        self.lexer.add('SOMA', "+"
-SUBTRACAO "−"
-MULTIPLICACAO "*"
-DIVISAO "/"
-RESTO "mod"
-ATRIBUICAO "="
-ABREASPAS "’"
-FECHAASPAS "’"
-PONTO "."
-VIRGULA ","
-DOISPONTOS ":"
-PONTOEVIRGULA ";"
-ABREPARENTESES "("
-FECHAPARENTESES ")"
-ABRECHAVES "{"
-FECHACHAVES "}"
-INICIOBLOCO "begin"
-FIMBLOCO "end"
-FOR "for"
-IF "if"
-ELSE "else"
-BREAK "break"
-WHILE "while"
-INT "int"
-CHAR "char"
-FLOAT "float"
-PRINT "print"
-READ "read"
-NUMERO "[0−9]+"
-CARACTER "[a−zA−Z]"
-REAL "[0−9]+[.][0−9]+"
+        self.lexer.add('SOMA', r'\+')
+        self.lexer.add('SUBTRACAO', r'\−')
+        self.lexer.add('MULTIPLICACAO', r'\*')
+        self.lexer.add('DIVISAO', r'\/')
+        self.lexer.add('RESTO', r'mod')
+        self.lexer.add('ATRIBUICAO', r'\=')
+        self.lexer.add('ABREASPAS', r'\’')
+        self.lexer.add('FECHAASPAS', r'\’')
+        self.lexer.add('PONTO', '\.')
+        self.lexer.add('VIRGULA', '\,')
+        self.lexer.add('DOISPONTOS', r'\':')
+        self.lexer.add('PONTOEVIRGULA',  r'\;')
+        self.lexer.add('ABREPARENTESES', r'\(')
+        self.lexer.add('FECHAPARENTESES', r'\)')
+        self.lexer.add('ABRECHAVES', r'\{')
+        self.lexer.add('FECHACHAVES', r'\}')
+        self.lexer.add('INICIOBLOCO', r'begin')
+        self.lexer.add('FIMBLOCO', r'end')
+        self.lexer.add('FOR',  r'for')
+        self.lexer.add('IF', r'if')
+        self.lexer.add('ELSE', r'else')
+        self.lexer.add('BREAK', r'break')
+        self.lexer.add('WHILE', r'while')
+        self.lexer.add('INT', r'int')
+        self.lexer.add('CHAR', r'char')
+        self.lexer.add('FLOAT', r'float')
+        self.lexer.add('PRINT', r'print')
+        self.lexer.add('READ', r'read')
+        self.lexer.add('NUMERO', r'[0−9]+')
+        self.lexer.add('CARACTER', r'[a−zA−Z]')
+        self.lexer.add('REAL', r'[0−9]+[.][0−9]+')
