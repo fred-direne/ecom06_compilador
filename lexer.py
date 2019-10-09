@@ -44,3 +44,7 @@ class Lexer():
         self.lexer.add('NUMERO', r'[0−9]+')
         self.lexer.add('CARACTER', r'[a−zA−Z]')
         self.lexer.add('REAL', r'[0−9]+[.][0−9]+')
+
+    def get_lexer(self):
+        self._add_tokens()
+        return self.lexer.build()        
