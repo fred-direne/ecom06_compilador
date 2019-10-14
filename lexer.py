@@ -5,11 +5,11 @@ class Lexer():
         self.lexer = LexerGenerator()
 
     def _add_tokens(self):
-        self.lexer.add('IGUAL', r'\=\=')
-        self.lexer.add('MAIOROUIGUAL', r'\>\=')
-        self.lexer.add('MENOROUIGUAL', r'\<\=')
+        self.lexer.add('IGUAL', r'\==')
+        self.lexer.add('MAIOROUIGUAL', r'\>=')
+        self.lexer.add('MENOROUIGUAL', r'\<=')
+        self.lexer.add('MENOR', r'\!=')
         self.lexer.add('MAIOR', r'\<')
-        self.lexer.add('MENOR', r'\!\=')
         self.lexer.add('AND', r'\&')
         self.lexer.add('OR', r'\|')
         self.lexer.add('NOT', r'\!')
@@ -23,7 +23,7 @@ class Lexer():
         self.lexer.add('FECHAASPAS', r'\’')
         self.lexer.add('PONTO', '\.')
         self.lexer.add('VIRGULA', '\,')
-        self.lexer.add('DOISPONTOS', r'\':')
+        self.lexer.add('DOISPONTOS', r'\:')
         self.lexer.add('PONTOEVIRGULA',  r'\;')
         self.lexer.add('ABREPARENTESES', r'\(')
         self.lexer.add('FECHAPARENTESES', r'\)')
@@ -41,6 +41,18 @@ class Lexer():
         self.lexer.add('FLOAT', r'float')
         self.lexer.add('PRINT', r'print')
         self.lexer.add('READ', r'read')
-        self.lexer.add('NUMERO', r'[0−9]+')
-        self.lexer.add('CARACTER', r'[a−zA−Z]')
-        self.lexer.add('REAL', r'[0−9]+[.][0−9]+')
+        self.lexer.add('REAL', r'-?\d+[.]\d+')
+        self.lexer.add('NUMERO', r'-?\d+')
+        self.lexer.add('IDENT', r'[a-zA-Z][a-zA-Z0-9]+')
+        self.lexer.add('CARACTER', r'[a−zA−Z]+')
+
+        #Ignore spaces
+        self.lexer.ignore('[\s\t]+')
+
+    def get_lexer(self):
+        self._add_tokens()
+        return self.lexer.build()
+
+
+
+
