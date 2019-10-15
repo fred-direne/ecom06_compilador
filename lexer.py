@@ -53,7 +53,3 @@ class Lexer():
     def get_lexer(self):
         self._add_tokens()
         return self.lexer.build()
-
-
-
-
