@@ -107,45 +107,37 @@ class Parser():
                 return #funcao ast Sub(left, right)
             elif op.gettokentype() == 'RESTO':
                 return #funcao ast Sub(left, right)
-        '''
-oparitimetico: 
-	"ident [( SOMA |
-		  SUBTRACAO | 
-		  MULTIPLICACAO | 
-		  DIVISAO | 
-		  RESTO )] ident"
+        @self.pg.production('oplogico : IDENT AND IDENT')
+        @self.pg.production('oplogico : IDENT OR IDENT')
+        @self.pg.production('oplogico : NOT IDENT')
+        
+        @self.pg.production('oprelacional : IDENT MENOR IDENT')
+        @self.pg.production('oprelacional : IDENT MAIOR IDENT')
+        @self.pg.production('oprelacional : IDENT MENOROUIGUAL IDENT')
+        @self.pg.production('oprelacional : IDENT MAIOROUIGUAL IDENT')
+        @self.pg.production('oprelacional : IDENT IGUAL IDENT')
+        @self.pg.production('oprelacional : IDENT DIFERENTE IDENT')
+        
+        @self.pg.production('for : FOR ABREPARENTESES IDENT PONTOEVIRGULA operacao PONTOEVIRGULA atribuicao FECHAPARENTESES INICIOBLOCO comando FIMBLOCO')
+        
+        @self.pg.production('while : WHILE ABREPARENTESES operacao FECHAPARENTESES INICIOBLOCO comando FIMBLOCO')
+        
+        @self.pg.production('if : IF ABREPARENTESES operacao FECHAPARENTESES INICIOBLOCO comando FIMBLOCO ELSE INICIOBLOCO comando FIMBLOCO')
+        
+        @self.pg.production('read : READ ABREPARENTESES ident FECHAPARENTESES')
+        
+        @self.pg.production('print : PRINT ABREPARENTESES NUMERO FECHAPARENTESES')
+        @self.pg.production('print : PRINT ABREPARENTESES CARACTER FECHAPARENTESES')
+        @self.pg.production('print : PRINT ABREPARENTESES ident FECHAPARENTESES')
+        @self.pg.production('print : PRINT ABREPARENTESES oparitmetico FECHAPARENTESES')
+        
+        @self.pg.production('decatrib : INT IDENT ATRIBUICAO NUMERO')
+        @self.pg.production('decatrib : INT IDENT ATRIBUICAO IDENT')
+        @self.pg.production('decatrib : FLOAT IDENT ATRIBUICAO REAL')
+        @self.pg.production('decatrib : FLOAT IDENT ATRIBUICAO IDENT')
+        @self.pg.production('decatrib : CHAR IDENT ATRIBUICAO ABREASPAS CARACTER FECHAASPAS')
+        @self.pg.production('decatrib : CHAR IDENT ATRIBUICAO IDENT')
 
-oplogico:
-	"(ident [( AND | OR )] ident)|( NOT ident )"
-
-oprelacional:
-	"ident [( MENOR | MAIOR | MENOROUIGUAL | MAIOROUIGUAL | IGUAL | DIFERENTE)] ident"
-
-
-for:
-	FOR ABREPARENTESES ident PONTOEVIRGULA operacao PONTOEVIRGULA atribuicao FECHAPARENTESES INICIO BLOCO comando|operacao FIMBLOCO
-
-while:	
-	WHILE ABREPARENTESES operacao FECHAPARENTESES INICIOBLOCO comando|operacao
-FIMBLOCO
-
-if:
-	IF ABREPARENTESES operacao FECHAPARENTESES INICIOBLOCO comando FIMBLOCO ELSE INICIOBLOCO comando|operacao FIMBLOCO
-
-read:
- 	"READ ABREPARENTESES ident FECHAPARENTESES"
-
-print:
-	"PRINT ABREPARENTESES [(NUMERO* | CARACTER* | ident | oparitmetico)] FECHAPARENTESES "
-	
-decatrib:
-	"(INT | FLOAT | CHAR) ident ATRIBUICAO (NUMERO | REAL | ABREASPAS CARACTER FECHAASPAS’ |ident)"
-
-ident:
-	"CARACTER[(NUMERO|CARACTER)]*"
-
-decvar:
-	"( INT | FLOAT | CHAR ) ident"
-
-
-        '''
+        @self.pg.production('decvar : INT IDENT')
+        @self.pg.production('decvar : FLOAT IDENT')
+        @self.pg.production('decvar : CHAR IDENT')
