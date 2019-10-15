@@ -17,7 +17,7 @@ class Lexer():
         self.lexer.add('OR', r'\|')
         self.lexer.add('NOT', r'\!')
         self.lexer.add('SOMA', r'\+')
-        self.lexer.add('SUBTRACAO', r"\−")
+        self.lexer.add('SUBTRACAO', '-')
         self.lexer.add('MULTIPLICACAO', r'\*')
         self.lexer.add('DIVISAO', r'\/')
         self.lexer.add('RESTO', r'mod')
@@ -48,7 +48,7 @@ class Lexer():
         self.lexer.add('CARACTER', r'[a−zA−Z]+')
 
         #Ignore spaces
-        self.lexer.ignore('[\s\t]+')
+        self.lexer.ignore('[\s\t \r\f\v]+')
 
     def get_lexer(self):
         self._add_tokens()
