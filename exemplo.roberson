@@ -1,0 +1,22 @@
+int a;
+int a = 8;
+int d = 3;
+float b = 8.1;
+print(2+2);
+print(b);
+int c;
+read(c);
+a > d;
+a < d;
+a == d;
+a >= d;
+a <= d;
+a != d;
+a & d;
+!a;
+a | b;
+a + d;
+a mod d;
+a * d;
+a / d;
+1 - a
