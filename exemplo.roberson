@@ -19,4 +19,7 @@ a + d;
 a mod d;
 a * d;
 a / d;
-1 - a
+if(a == b) begin a =0; end
+else{a =1;}
+while(a < -3.3){a = a+1;}
+for(aaa = 0; aaa < 10; aaa = aaa-1){ teste = 0;}
