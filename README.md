@@ -1,4 +1,12 @@
-# ECOM06 Compilador
-Compilador do trabalho de ECOM06 (Compiladores), professora Thatyana Faria de Piola Seraphim  
-Membros: Breno, Fabrício, Frederico, Leonardo e Marcel  
-Ferramentas utilizadas: RPLY (Python Lexx Yacc) e LLVM  
+# Compilador Roberson
+Compilador do trabalho da disciplina de ECOM06 (Compiladores)  
+
+## Membros
+* Breno  
+* Fabrício
+* Fred  
+* Leo 
+* Marcel  
+
+## Ferramentas Utilizadas
+* RPLY (Python Lexx Yacc)  
