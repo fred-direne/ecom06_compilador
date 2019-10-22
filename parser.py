@@ -98,7 +98,7 @@ class Parser():
             right = p[2]
             op = p[1]
             if op.gettokentype() == 'SOMA':
-                return #funcao ast Sum(left, right)
+                return ast.Sum(left, right)
             elif op.gettokentype() == 'SUBTRACAO':
                 return #funcao ast Sub(left, right)
             elif op.gettokentype() == 'MULTIPLICACAO':
