@@ -1,4 +1,4 @@
-class Number():
+class Numero():
     def __init__(self, value):
         self.value = value
 
@@ -21,6 +21,13 @@ class Sub(BinaryOp):
     def eval(self):
         return self.left.eval() - self.right.eval()
 
+class Mul(BinaryOp):
+    def eval(self):
+        return self.left.eval() * self.right.eval()
+
+class Div(BinaryOp):
+    def eval(self):
+        return self.left.eval() / self.right.eval()
 
 class Print():
     def __init__(self, value):
@@ -28,3 +35,10 @@ class Print():
 
     def eval(self):
         print(self.value.eval())
+
+class Command():
+    def __init__(self, value):
+        self.value = value
+
+    def eval(self):
+        return self.value.eval()

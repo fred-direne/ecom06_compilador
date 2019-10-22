@@ -1,10 +1,10 @@
 from lexer import Lexer
-from parser import Parser
+from parse import Parser
 
 f = open("exemplo.roberson", "r")
 
 #text_input = f.read()
-text_input = "2 + 2"
+text_input = "print(2);"
 
 lexer = Lexer().get_lexer()
 tokens = lexer.lex(text_input)
