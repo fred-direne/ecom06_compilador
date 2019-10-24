@@ -1,0 +1,9 @@
+print(10 * 'abc');
+print(10 mod 2);
+int banana;
+int a;
+int b;
+int c;
+int d;
+int teste = 20;
+print(teste * 10);
