@@ -1,0 +1,26 @@
+----MUDANÇAS FEITAS NA LINGUAGEM ORIGINAL:
+- Token DOISPONTOS não fazia nada então foi comentado
+- Adicionado Token STRING que consiste em qualquer cadeia de ASPAS DUPLAS Exemplo: "a", "abc", "asd12wd"
+- Caracter foi modificado para 1 caracter a-zA-Z que esteja entre ASPAS SIMPLES Exemplo: 'a', 'b', 'C'
+- Variáveis são identificadas por qualquer cadeia sem aspas Exemplo: a, abc, C
+
+----CHECKLIST:
+Suporte dos tipos de dados: inteiro, real, caracter.                    -------- OK
+Comandos de atribuição.                                                 -------- EM DESENVOLVIMENTO (LEO)
+Comandos de entrada e saída.                                            -------- PRINT OK |  READ NAO FOI FEITO
+Comandos condicionais.                                                  -------- FALTA FAZER
+Comandos de repetição.                                                  -------- FALTA FAZER
+Operadores relacionais (=, >=, <=, >, <, ! =).                          -------- FALTA FAZER (TEM OS OBJETOS NA AST, MAS FALTA FAZER O PARSE E TESTAR COM IF / FOR)
+Operadores lógicos (and, or, not).                                      -------- FALTA FAZER
+Operadores aritméticos (+, −, ∗, /, mod).                               -------- OK
+Símbolos especiais (. , : ; ( ) { })                                    -------- OK
+Blocos de comandos delimitados por begin/end ou { }.                    -------- OK
+Lista de palavras reservadas.                                           -------- OK
+3 programas exemplo utilizando entrada/saída, condicionais e repeticao  -------- FALTA FAZER
+Durante a compilacao gerar um novo arquivo com o código traduzido
+para tokens, exemplo: print(1); :: Token(PRINT), Token(ABREPARENTESES).... (Implementação > ult. paragrafo)  -------FALTA FAZER
+Fazer a documentação e apresentar a árvore de derivação para uma das regras (Documentação > item 3) -------FALTA FAZER
+Fazer um readme de como a compilacao e execucao e feita             ---------- FALTA FAZER
+
+----OUTROS:
+usando este projeto de base: https://github.com/joshsharp/python-braid/

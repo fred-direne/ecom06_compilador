@@ -1,6 +1,5 @@
 from src.errors import *
 
-
 class Numero():
     def __init__(self, value):
         self.value = value
@@ -22,7 +21,7 @@ class Caracter():
         self.value = value
 
     def eval(self):
-        return chr(self.value)
+        return str(self.value).strip("'")
 
 
 class String():
@@ -30,7 +29,7 @@ class String():
         self.value = value
 
     def eval(self):
-        return str(self.value)
+        return str(self.value).strip("\"")
 
 
 class OpBinario():
@@ -78,6 +77,31 @@ class Resto(OpBinario):
     def eval(self):
         return self.left.eval() % self.right.eval()
 
+class Menor(OpBinario):
+    def eval(self):
+        return self.left.eval().lt(self.right.eval())
+
+class Maior(OpBinario):
+    def eval(self):
+        return self.left.eval().gt(self.right.eval())
+
+class MenorOuIgual(OpBinario):
+    def eval(self):
+        return self.left.eval().lte(self.right.eval())
+
+class MaiorOuIgual(OpBinario):
+    def eval(self):
+        return self.left.eval().gte(self.right.eval())
+
+class Igual(OpBinario):
+    def eval(self):
+        return self.left.eval().equals(self.right.eval())
+
+class Diferente(OpBinario):
+    def eval(self):
+        result = self.left.eval().equals(self.right.eval())
+        result.value = not result.value
+        return result
 
 class Print():
     def __init__(self, value):
@@ -93,4 +117,12 @@ class Variavel():
         self.value = value
 
     def eval(self):
-        return self.value
+        # este caso so acontece quando declara a variavel sem atribuir valor Ex: int a, float b;
+        if self.value is None:
+            return None
+        else:
+            # VALUE GUARDA UM NUMERO() OU REAL() OU CARACTER()
+            return self.value.eval()
+
+    def gettype(self):
+        return self.vtype
