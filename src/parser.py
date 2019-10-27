@@ -109,10 +109,27 @@ class Parser():
         @self.pg.production('comando : decvar')
         @self.pg.production('comando : decatrib')
         @self.pg.production('comando : decread')
+<<<<<<< HEAD
         def comando_function(p):
             return p[0]
 
         @self.pg.production('comando : WHILE ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO bloco FIMBLOCO')
+=======
+        @self.pg.production('comando : decwhile')
+        @self.pg.production('comando : decif')
+        def comando_function(p):
+            return p[0]
+
+        @self.pg.production('decif : IF ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO')
+        def if_function(p):
+            return If(condition=p[2], body=p[5])
+
+        @self.pg.production('decif : IF ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO ELSE INICIOBLOCO listacomando FIMBLOCO')
+        def if_else_function(p):
+            return IfElse(condition=p[2], body=p[5], else_body=p[9])
+
+        @self.pg.production('decwhile : WHILE ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO')
+>>>>>>> master
         def while_function(p):
             print(p)
             return p[2]
