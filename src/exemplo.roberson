@@ -1,1 +1,5 @@
-print(10 mod 3);
+while(2 < 0)
+begin
+print(1);
+print(2);
+end

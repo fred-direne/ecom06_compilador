@@ -1,5 +1,6 @@
 from rply import LexerGenerator
 
+
 class Lexer():
     def __init__(self):
         self.lexer = LexerGenerator()
@@ -26,17 +27,17 @@ class Lexer():
         self.lexer.add('ATRIBUICAO', r'\=')
         # self.lexer.add('ASPASSIMPLES', '\'')
         # self.lexer.add('ASPASDUPLAS', '"')
-        self.lexer.add('PONTO', '\.')
-        self.lexer.add('VIRGULA', '\,')
+        # self.lexer.add('PONTO', '\.')
+        # self.lexer.add('VIRGULA', '\,')
         # self.lexer.add('DOISPONTOS', r'\:')
-        self.lexer.add('PONTOEVIRGULA',  r'\;')
+        self.lexer.add('PONTOEVIRGULA', r'\;')
         self.lexer.add('ABREPARENTESES', r'\(')
         self.lexer.add('FECHAPARENTESES', r'\)')
-        self.lexer.add('ABRECHAVES', r'\{')
-        self.lexer.add('FECHACHAVES', r'\}')
+        # self.lexer.add('ABRECHAVES', r'\{')
+        # self.lexer.add('FECHACHAVES', r'\}')
         self.lexer.add('INICIOBLOCO', r'begin')
         self.lexer.add('FIMBLOCO', r'end')
-        self.lexer.add('FOR',  r'for')
+        self.lexer.add('FOR', r'for')
         self.lexer.add('IF', r'if')
         self.lexer.add('ELSE', r'else')
         self.lexer.add('BREAK', r'break')
@@ -44,6 +45,7 @@ class Lexer():
         self.lexer.add('READ', r'read')
         self.lexer.add('REAL', r'-?\d+[.]\d+')
         self.lexer.add('NUMERO', r'-?\d+')
+        self.lexer.add('BOOLEANO', "true(?!\w)|false(?!\w)")
         self.lexer.add('STRING', r'"(?:\.|(\\\")|[^\""\n])*"')
         self.lexer.add('IDENT', r'[a-zA-Z][a-zA-Z0-9]*')
         self.lexer.add('CARACTER', r'\'[a-zA-Z]\'')
@@ -51,8 +53,7 @@ class Lexer():
         # self.lexer.add('IDENT', r'[a-zA-Z][a-zA-Z0-9]*')
         # self.lexer.add('CARACTER', r'[a-zA-Z]')
 
-
-        #Ignore spaces
+        # Ignore spaces
         self.lexer.ignore('[\s\t \r\f\v]+')
 
     def get_lexer(self):

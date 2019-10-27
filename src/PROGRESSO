@@ -6,7 +6,7 @@
 
 ----CHECKLIST:
 Suporte dos tipos de dados: inteiro, real, caracter.                    -------- OK
-Comandos de atribuição.                                                 -------- EM DESENVOLVIMENTO (LEO)
+Comandos de atribuição.                                                 -------- OK
 Comandos de entrada e saída.                                            -------- PRINT OK |  READ NAO FOI FEITO
 Comandos condicionais.                                                  -------- FALTA FAZER
 Comandos de repetição.                                                  -------- FALTA FAZER

@@ -1,5 +1,12 @@
 from src.errors import *
 
+class Booleano():
+    def __init__(self, value):
+        self.value = value
+
+    def eval(self):
+        return bool(self.value)
+
 class Numero():
     def __init__(self, value):
         self.value = value
@@ -79,29 +86,47 @@ class Resto(OpBinario):
 
 class Menor(OpBinario):
     def eval(self):
-        return self.left.eval().lt(self.right.eval())
+        return self.left.eval() < self.right.eval()
 
 class Maior(OpBinario):
     def eval(self):
-        return self.left.eval().gt(self.right.eval())
+        return self.left.eval() > self.right.eval()
 
 class MenorOuIgual(OpBinario):
     def eval(self):
-        return self.left.eval().lte(self.right.eval())
+        return self.left.eval() <= self.right.eval()
 
 class MaiorOuIgual(OpBinario):
     def eval(self):
-        return self.left.eval().gte(self.right.eval())
+        return self.left.eval() >= self.right.eval()
 
 class Igual(OpBinario):
     def eval(self):
-        return self.left.eval().equals(self.right.eval())
+        return self.left.eval() == self.right.eval()
 
 class Diferente(OpBinario):
     def eval(self):
-        result = self.left.eval().equals(self.right.eval())
-        result.value = not result.value
-        return result
+        return self.left.eval() != self.right.eval()
+
+class And(OpBinario):
+    def eval(self):
+        one = self.left
+        two = self.right
+        return one.value and two.value
+
+
+class Or(OpBinario):
+    def eval(self):
+        one = self.left
+        two = self.right
+        return one.value or two.value
+
+class Not():
+    def __init__(self, value):
+        self.value = value
+
+    def eval(self):
+        return not self.value.eval()
 
 class Print():
     def __init__(self, value):

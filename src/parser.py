@@ -22,14 +22,14 @@ class Parser():
         'ATRIBUICAO',
         # 'ASPASSIMPLES',
         # 'ASPASDUPLAS',
-        'PONTO',
-        'VIRGULA',
+        # 'PONTO',
+        # 'VIRGULA',
         # 'DOISPONTOS',
         'PONTOEVIRGULA',
         'ABREPARENTESES',
         'FECHAPARENTESES',
-        'ABRECHAVES',
-        'FECHACHAVES',
+        # 'ABRECHAVES',
+        # 'FECHACHAVES',
         'INICIOBLOCO',
         'FIMBLOCO',
         'FOR',
@@ -47,6 +47,7 @@ class Parser():
         'IDENT',
         'CARACTER',
         'STRING',
+        'BOOLEANO',
     ]
 
     precedence = [
@@ -90,13 +91,39 @@ class Parser():
         @self.pg.production('comando : decprint')
         @self.pg.production('comando : decvar')
         @self.pg.production('comando : decatrib')
-        # @self.pg.production('comando : decif')
+        @self.pg.production('comando : decread')
+        @self.pg.production('comando : decwhile')
         def comando_function(p):
             return p[0]
+
+        @self.pg.production('decwhile : WHILE ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO')
+        def while_function(p):
+            return p[5]
 
         @self.pg.production('decprint : PRINT ABREPARENTESES operacao FECHAPARENTESES')
         def print_function(p):
             return Print(p[2])
+
+        @self.pg.production('decread : READ ABREPARENTESES IDENT FECHAPARENTESES')
+        def read_function(p):
+            name = p[2].getstr()
+            v = self.variables.get(name)
+            if v is not None:
+                valorlido = input()
+                if v.gettype() == "int":
+                    novavariavel = Variavel(name=name, vtype="int", value=Numero(int(valorlido)))
+                    self.variables[name] = novavariavel
+                    return novavariavel
+                elif v.gettype() == "float":
+                    novavariavel = Variavel(name=name, vtype="float", value=Real(float(valorlido)))
+                    self.variables[name] = novavariavel
+                    return novavariavel
+                elif v.gettype() == "char":
+                    novavariavel = Variavel(name=name, vtype="char", value=Caracter(str(valorlido)))
+                    self.variables[name] = novavariavel
+                    return novavariavel
+            else:
+                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
 
         @self.pg.production('decatrib : IDENT ATRIBUICAO NUMERO')
         def atribuicaoint_function(p):
@@ -104,13 +131,41 @@ class Parser():
             v = self.variables.get(name)
             if v is not None:
                 if v.gettype() == "int":
-                    novavariavel = Variavel(name=name, vtype=p[2].getstr(), value=Numero(p[2].value))
+                    novavariavel = Variavel(name=name, vtype="int", value=Numero(p[2].value))
                     self.variables[name] = novavariavel
                     return novavariavel
                 else:
                     raise LogicError("Tipo de variavel diferente")
             else:
-                raise LogicError("Variavel nao foi declarada nao da pra atribuir valor")
+                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
+
+        @self.pg.production('decatrib : IDENT ATRIBUICAO REAL')
+        def atribuicaofloat_function(p):
+            name = p[0].getstr()
+            v = self.variables.get(name)
+            if v is not None:
+                if v.gettype() == "float":
+                    novavariavel = Variavel(name=name, vtype="float", value=Real(p[2].value))
+                    self.variables[name] = novavariavel
+                    return novavariavel
+                else:
+                    raise LogicError("Tipo de variavel diferente")
+            else:
+                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
+
+        @self.pg.production('decatrib : IDENT ATRIBUICAO CARACTER')
+        def atribuicaochar_function(p):
+            name = p[0].getstr()
+            v = self.variables.get(name)
+            if v is not None:
+                if v.gettype() == "char":
+                    novavariavel = Variavel(name=name, vtype="char", value=Caracter(p[2].value))
+                    self.variables[name] = novavariavel
+                    return novavariavel
+                else:
+                    raise LogicError("Tipo de variavel diferente")
+            else:
+                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
 
         @self.pg.production('decvar : INT IDENT')
         @self.pg.production('decvar : FLOAT IDENT')
@@ -159,6 +214,8 @@ class Parser():
         @self.pg.production('operacao  : operacao MULTIPLICACAO operacao')
         @self.pg.production('operacao  : operacao DIVISAO operacao')
         @self.pg.production('operacao  : operacao RESTO operacao')
+        @self.pg.production('operacao  : operacao AND operacao')
+        @self.pg.production('operacao  : operacao OR operacao')
         def operacao_function(p):
             left = p[0]
             right = p[2]
@@ -173,8 +230,16 @@ class Parser():
                 return Divisao(left, right)
             elif operator.gettokentype() == 'RESTO':
                 return Resto(left, right)
+            elif operator.gettokentype() == 'AND':
+                return And(left, right)
+            elif operator.gettokentype() == 'OR':
+                return Or(left, right)
             else:
                 raise LogicError('Oops, this should not be possible!')
+
+        @self.pg.production('operacao  : NOT operacao')
+        def notoperacao_function(p):
+                return Not(p[1])
 
         @self.pg.production('oprelacional  : operacao MENOR operacao')
         @self.pg.production('oprelacional  : operacao MAIOR operacao')
@@ -229,6 +294,10 @@ class Parser():
         @self.pg.production('constante : STRING')
         def string_const(p):
             return String(p[0].value)
+
+        @self.pg.production('constante : BOOLEANO')
+        def booleano_const(p):
+            return Booleano(True if p[0].getstr() == 'true' else False)
 
         @self.pg.error
         def error_handle(token):
