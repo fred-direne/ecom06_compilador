@@ -86,29 +86,6 @@ class Block():
         return result
 
 
-class If():
-    def __init__(self, condition, body):
-        self.condition = condition
-        self.body = body
-
-    def eval(self):
-        condition = self.condition.eval()
-        if condition:
-            return self.body.eval()
-
-class IfElse():
-    def __init__(self, condition, body, else_body):
-        self.condition = condition
-        self.body = body
-        self.else_body = else_body
-
-    def eval(self):
-        condition = self.condition.eval()
-        if condition:
-            return self.body.eval()
-        else:
-            return self.else_body.eval()
-
 class Soma(OpBinario):
     def eval(self):
         return self.left.eval() + self.right.eval()
@@ -219,3 +196,26 @@ class While():
 
     def eval(self):
         return None
+
+class If():
+    def __init__(self, condition, body):
+        self.condition = condition
+        self.body = body
+
+    def eval(self):
+        condition = self.condition.eval()
+        if condition:
+            return self.body.eval()
+
+class IfElse():
+    def __init__(self, condition, body, else_body):
+        self.condition = condition
+        self.body = body
+        self.else_body = else_body
+
+    def eval(self):
+        condition = self.condition.eval()
+        if condition:
+            return self.body.eval()
+        else:
+            return self.else_body.eval()
