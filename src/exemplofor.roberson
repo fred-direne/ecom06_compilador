@@ -1,8 +1,5 @@
 int i;
 for (i = 0; i < 10; i = i + 1)
 begin
-if(i mod 2 == 0)
-begin
 print(i);
-end;
 end;

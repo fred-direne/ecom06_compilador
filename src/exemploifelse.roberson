@@ -1,0 +1,14 @@
+int i = 0;
+print(i);
+
+read(i);
+
+if(i > 10)
+begin
+print("maior que 10");
+end
+else
+begin
+print("menor que 10");
+end;
+

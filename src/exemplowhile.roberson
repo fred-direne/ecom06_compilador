@@ -1,0 +1,12 @@
+int i = 0;
+int a;
+a = 10;
+
+while (i < 10)
+begin
+print(i);
+i = i + 1;
+end;
+
+print("Valor final de i");
+print(i);
