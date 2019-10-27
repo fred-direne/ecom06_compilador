@@ -1,24 +1,6 @@
 from src.errors import *
 
 
-class Programa():
-
-    def __init__(self, statement):
-        self.statements = []
-        self.statements.append(statement)
-
-    def add_statement(self, statement):
-        self.statements.insert(0, statement)
-
-    def eval(self):
-        result = None
-        for statement in self.statements:
-            result = statement.eval()
-        return result
-
-    def get_statements(self):
-        return self.statements
-
 class Booleano():
     def __init__(self, value):
         self.value = value
