@@ -1,0 +1,6 @@
+float km = 10.1;
+float r;
+
+r = km * 0.621371;
+
+print(r);

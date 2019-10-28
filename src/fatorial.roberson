@@ -1,0 +1,10 @@
+int n;
+read(n);
+
+int r = 0;
+int i = 1;
+for(i; i < n; i = i + 1) begin
+    r = r * i;
+end;
+
+print(r);
