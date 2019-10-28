@@ -15,4 +15,5 @@ for token in tokens2:
 pg = Parser()
 pg.parse()
 parser = pg.get_parser()
-parser.parse(tokens).eval()
+res = parser.parse(tokens, state=Parser())
+print(res.eval(Parser()))

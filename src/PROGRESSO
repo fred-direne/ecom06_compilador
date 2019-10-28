@@ -7,11 +7,11 @@
 ----CHECKLIST:
 Suporte dos tipos de dados: inteiro, real, caracter.                    -------- OK
 Comandos de atribuição.                                                 -------- OK
-Comandos de entrada e saída.                                            -------- PRINT OK |  READ NAO FOI FEITO
-Comandos condicionais.                                                  -------- FALTA FAZER
-Comandos de repetição.                                                  -------- FALTA FAZER
-Operadores relacionais (=, >=, <=, >, <, ! =).                          -------- FALTA FAZER (TEM OS OBJETOS NA AST, MAS FALTA FAZER O PARSE E TESTAR COM IF / FOR)
-Operadores lógicos (and, or, not).                                      -------- FALTA FAZER
+Comandos de entrada e saída.                                            -------- OK
+Comandos condicionais.                                                  -------- OK
+Comandos de repetição.                                                  -------- OK
+Operadores relacionais (=, >=, <=, >, <, ! =).                          -------- OK
+Operadores lógicos (and, or, not).                                      -------- OK
 Operadores aritméticos (+, −, ∗, /, mod).                               -------- OK
 Símbolos especiais (. , : ; ( ) { })                                    -------- OK
 Blocos de comandos delimitados por begin/end ou { }.                    -------- OK

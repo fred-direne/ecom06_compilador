@@ -3,7 +3,7 @@ from src.ast import *
 from src.errors import *
 
 
-class Parser():
+class Parser(object):
     tokens = [
         'IGUAL',
         'MAIOROUIGUAL',
@@ -53,10 +53,10 @@ class Parser():
     precedence = [
         ('left', ['ATRIBUICAO']),
         ('left', [',', '.']),
-        ('left', ['IF', 'DOISPONTOS', 'ELSE', 'WHILE', 'FOR']),
+        ('left', ['IF', 'INICIOBLOCO', 'ELSE', 'FIMBLOCO', 'WHILE', 'FOR']),
         ('left', ['AND', 'OR']),
         ('left', ['NOT']),
-        ('left', ['==', '!=', '<', '>', '<=', '>=']),
+        ('left', ['==', '!=', '>=', '>', '<', '<=']),
         ('left', ['SOMA', 'SUBTRACAO']),
         ('left', ['MULTIPLICACAO', 'DIVISAO', 'RESTO'])
     ]
@@ -70,162 +70,83 @@ class Parser():
 
     def parse(self):
 
-        @self.pg.production('programa : listacomando')
-        def programa(p):
+        @self.pg.production('main : programa')
+        def main_programa(self, p):
             return p[0]
 
-        @self.pg.production('listacomando : comando PONTOEVIRGULA')
-        def listacomando_simples(p):
+        @self.pg.production('programa : comando_completo')
+        def programa_comando(state, p):
+            return Programa(p[0])
+
+        @self.pg.production('programa : comando_completo programa')
+        def programa_comando_programa(state, p):
+            if type(p[1]) is Programa:
+                pr = p[1]
+            else:
+                pr = Programa(p[1])
+            pr.add_statement(p[0])
+            return p[1]
+
+        @self.pg.production('bloco : comando_completo')
+        def bloco_expr(state, p):
             return Block(p[0])
 
-        @self.pg.production('listacomando : comando  PONTOEVIRGULA listacomando')
-        def listacomando_bloco(p):
-            if type(p[2]) is Block:
-                b = p[2]
+        @self.pg.production('bloco : comando_completo bloco')
+        def bloco_expr_bloco(state, p):
+            if type(p[1]) is Block:
+                b = p[1]
             else:
-                b = Block(p[2])
+                b = Block(p[1])
 
             b.add_statement(p[0])
             return b
 
-        @self.pg.production('comando : decprint')
-        @self.pg.production('comando : decvar')
-        @self.pg.production('comando : decatrib')
-        @self.pg.production('comando : decread')
-        @self.pg.production('comando : decwhile')
-        @self.pg.production('comando : decif')
-        def comando_function(p):
+        @self.pg.production('comando_completo : comando PONTOEVIRGULA')
+        def comando_completo(state, p):
             return p[0]
 
-        @self.pg.production('decif : IF ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO')
-        def if_function(p):
+        @self.pg.production('comando : decprint')
+        @self.pg.production('comando : decread')
+        @self.pg.production('comando : decatrib')
+        @self.pg.production('comando : decvar')
+        @self.pg.production('comando : decif')
+        @self.pg.production('comando : decfor')
+        @self.pg.production('comando : decwhile')
+        def comando_function(state, p):
+            return p[0]
+
+        @self.pg.production('decwhile : WHILE ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO bloco FIMBLOCO')
+        def while_function(state, p):
+            return While(condition=p[2], body=p[5])
+
+        @self.pg.production('decfor : FOR ABREPARENTESES decatrib PONTOEVIRGULA oprelacional PONTOEVIRGULA decatrib FECHAPARENTESES INICIOBLOCO bloco FIMBLOCO')
+        def for_function(state, p):
+            return For(atrib=p[2], condition=p[4], increment=p[6], body=p[9])
+
+        @self.pg.production('decif : IF ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO bloco FIMBLOCO')
+        def if_function(state, p):
             return If(condition=p[2], body=p[5])
 
-        @self.pg.production('decif : IF ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO ELSE INICIOBLOCO listacomando FIMBLOCO')
-        def if_else_function(p):
+        @self.pg.production('decif : IF ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO bloco FIMBLOCO ELSE INICIOBLOCO bloco FIMBLOCO')
+        def if_else_function(state, p):
             return IfElse(condition=p[2], body=p[5], else_body=p[9])
 
-        @self.pg.production('decwhile : WHILE ABREPARENTESES oprelacional FECHAPARENTESES INICIOBLOCO listacomando FIMBLOCO')
-        def while_function(p):
-            return p[5]
-
-        @self.pg.production('decprint : PRINT ABREPARENTESES operacao FECHAPARENTESES')
-        def print_function(p):
+        @self.pg.production('decprint : PRINT ABREPARENTESES expressao FECHAPARENTESES')
+        def print_function(state, p):
             return Print(p[2])
 
         @self.pg.production('decread : READ ABREPARENTESES IDENT FECHAPARENTESES')
-        def read_function(p):
-            name = p[2].getstr()
-            v = self.variables.get(name)
-            if v is not None:
-                valorlido = input()
-                if v.gettype() == "int":
-                    novavariavel = Variavel(name=name, vtype="int", value=Numero(int(valorlido)))
-                    self.variables[name] = novavariavel
-                    return novavariavel
-                elif v.gettype() == "float":
-                    novavariavel = Variavel(name=name, vtype="float", value=Real(float(valorlido)))
-                    self.variables[name] = novavariavel
-                    return novavariavel
-                elif v.gettype() == "char":
-                    novavariavel = Variavel(name=name, vtype="char", value=Caracter(str(valorlido)))
-                    self.variables[name] = novavariavel
-                    return novavariavel
-            else:
-                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
+        def read_function(state, p):
+            return Read(p[2].getstr())
 
-        @self.pg.production('decatrib : IDENT ATRIBUICAO NUMERO')
-        def atribuicaoint_function(p):
-            name = p[0].getstr()
-            v = self.variables.get(name)
-            if v is not None:
-                if v.gettype() == "int":
-                    novavariavel = Variavel(name=name, vtype="int", value=Numero(p[2].value))
-                    self.variables[name] = novavariavel
-                    return novavariavel
-                else:
-                    raise LogicError("Tipo de variavel diferente")
-            else:
-                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
-
-        @self.pg.production('decatrib : IDENT ATRIBUICAO REAL')
-        def atribuicaofloat_function(p):
-            name = p[0].getstr()
-            v = self.variables.get(name)
-            if v is not None:
-                if v.gettype() == "float":
-                    novavariavel = Variavel(name=name, vtype="float", value=Real(p[2].value))
-                    self.variables[name] = novavariavel
-                    return novavariavel
-                else:
-                    raise LogicError("Tipo de variavel diferente")
-            else:
-                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
-
-        @self.pg.production('decatrib : IDENT ATRIBUICAO CARACTER')
-        def atribuicaochar_function(p):
-            name = p[0].getstr()
-            v = self.variables.get(name)
-            if v is not None:
-                if v.gettype() == "char":
-                    novavariavel = Variavel(name=name, vtype="char", value=Caracter(p[2].value))
-                    self.variables[name] = novavariavel
-                    return novavariavel
-                else:
-                    raise LogicError("Tipo de variavel diferente")
-            else:
-                raise ImmutableError("Variavel nao foi declarada nao da pra atribuir valor")
-
-        @self.pg.production('decvar : INT IDENT')
-        @self.pg.production('decvar : FLOAT IDENT')
-        @self.pg.production('decvar : CHAR IDENT')
-        def declaracao_function(p):
-            name = p[1].getstr()
-            if self.variables.get(name) is not None:
-                raise LogicError("Variable already declared")
-            else:
-                v = Variavel(name=p[1].getstr(), vtype=p[0].getstr(), value=None)
-                self.variables[name] = v
-            return v
-
-        @self.pg.production('decvar : INT IDENT ATRIBUICAO NUMERO')
-        def decvarint_function(p):
-            name = p[1].getstr()
-            if self.variables.get(name) is not None:
-                raise LogicError("Variable already declared")
-            else:
-                v = Variavel(name=p[1].getstr(), vtype=p[0].getstr(), value=Numero(p[3].value))
-                self.variables[name] = v
-            return v
-
-        @self.pg.production('decvar : FLOAT IDENT ATRIBUICAO REAL')
-        def decvarfloat_function(p):
-            name = p[1].getstr()
-            if self.variables.get(name) is not None:
-                raise LogicError("Variable already declared")
-            else:
-                v = Variavel(name=p[1].getstr(), vtype=p[0].getstr(), value=Real(p[3].value))
-                self.variables[name] = v
-            return v
-
-        @self.pg.production('decvar : CHAR IDENT ATRIBUICAO CARACTER')
-        def decvarchar_function(p):
-            name = p[1].getstr()
-            if self.variables.get(name) is not None:
-                raise LogicError("Variable already declared")
-            else:
-                v = Variavel(name=p[1].getstr(), vtype=p[0].getstr(), value=Caracter(p[3].value))
-                self.variables[name] = v
-            return v
-
-        @self.pg.production('operacao  : operacao SOMA operacao')
-        @self.pg.production('operacao  : operacao SUBTRACAO operacao')
-        @self.pg.production('operacao  : operacao MULTIPLICACAO operacao')
-        @self.pg.production('operacao  : operacao DIVISAO operacao')
-        @self.pg.production('operacao  : operacao RESTO operacao')
-        @self.pg.production('operacao  : operacao AND operacao')
-        @self.pg.production('operacao  : operacao OR operacao')
-        def operacao_function(p):
+        @self.pg.production('expressao : expressao SOMA expressao')
+        @self.pg.production('expressao : expressao SUBTRACAO expressao')
+        @self.pg.production('expressao : expressao MULTIPLICACAO expressao')
+        @self.pg.production('expressao : expressao DIVISAO expressao')
+        @self.pg.production('expressao : expressao RESTO expressao')
+        @self.pg.production('expressao : expressao AND expressao')
+        @self.pg.production('expressao : expressao OR expressao')
+        def expressao_function(state, p):
             left = p[0]
             right = p[2]
             operator = p[1]
@@ -244,19 +165,19 @@ class Parser():
             elif operator.gettokentype() == 'OR':
                 return Or(left, right)
             else:
-                raise LogicError('Oops, this should not be possible!')
+                raise LogicError('Impossive')
 
-        @self.pg.production('operacao  : NOT operacao')
-        def notoperacao_function(p):
+        @self.pg.production('expressao : NOT expressao')
+        def notexpressao_function(state, p):
                 return Not(p[1])
 
-        @self.pg.production('oprelacional  : operacao MENOR operacao')
-        @self.pg.production('oprelacional  : operacao MAIOR operacao')
-        @self.pg.production('oprelacional  : operacao MENOROUIGUAL operacao')
-        @self.pg.production('oprelacional  : operacao MAIOROUIGUAL operacao')
-        @self.pg.production('oprelacional  : operacao IGUAL operacao')
-        @self.pg.production('oprelacional  : operacao DIFERENTE operacao')
-        def oprelacional_function(p):
+        @self.pg.production('oprelacional : expressao MENOR expressao')
+        @self.pg.production('oprelacional : expressao MAIOR expressao')
+        @self.pg.production('oprelacional : expressao MENOROUIGUAL expressao')
+        @self.pg.production('oprelacional : expressao MAIOROUIGUAL expressao')
+        @self.pg.production('oprelacional : expressao IGUAL expressao')
+        @self.pg.production('oprelacional : expressao DIFERENTE expressao')
+        def oprelacional_function(state, p):
             left = p[0]
             right = p[2]
             operator = p[1]
@@ -273,43 +194,54 @@ class Parser():
             elif operator.gettokentype() == 'DIFERENTE':
                 return Diferente(left, right)
             else:
-                raise LogicError('Oops, this should not be possible!')
+                raise LogicError('Impossive')
 
-        @self.pg.production('operacao : IDENT')
-        def operacao_ident(p):
-            name = p[0].getstr()
-            v = self.variables.get(name)
-            if v is None:
-                raise LogicError("Variable not found")
-            else:
-                return v
+        @self.pg.production('expressao : IDENT')
+        def expressao_ident(state, p):
+            return VariavelExpressao(p[0].getstr())
 
-        @self.pg.production('operacao : constante')
-        def operacao_const(p):
+        @self.pg.production('decatrib : IDENT ATRIBUICAO expressao')
+        def atribuicao_function(state, p):
+            return Atribuicao(p[0].getstr(), p[2])
+
+        @self.pg.production('decvar : INT IDENT')
+        @self.pg.production('decvar : FLOAT IDENT')
+        @self.pg.production('decvar : CHAR IDENT')
+        def declaracao_function(state, p):
+            return Declaracao(nome=p[1].getstr(), tipo=p[0].getstr(), value=None)
+
+        @self.pg.production('decvar : INT IDENT ATRIBUICAO NUMERO')
+        @self.pg.production('decvar : FLOAT IDENT ATRIBUICAO REAL')
+        @self.pg.production('decvar : CHAR IDENT ATRIBUICAO CARACTER')
+        def decvarint_function(state, p):
+            return Declaracao(nome=p[1].getstr(), tipo=p[0].getstr(), value=p[3].getstr())
+
+        @self.pg.production('expressao : constante')
+        def expressao_const(state, p):
             return p[0]
 
         @self.pg.production('constante : NUMERO')
-        def numero_const(p):
+        def numero_const(state, p):
             return Numero(p[0].value)
 
         @self.pg.production('constante : REAL')
-        def real_const(p):
+        def real_const(state, p):
             return Real(p[0].value)
 
         @self.pg.production('constante : CARACTER')
-        def caracter_const(p):
+        def caracter_const(state, p):
             return Caracter(p[0].value)
 
         @self.pg.production('constante : STRING')
-        def string_const(p):
+        def string_const(state, p):
             return String(p[0].value)
 
         @self.pg.production('constante : BOOLEANO')
-        def booleano_const(p):
+        def booleano_const(state, p):
             return Booleano(True if p[0].getstr() == 'true' else False)
 
         @self.pg.error
-        def error_handle(token):
+        def error_handle(state, token):
             raise ValueError(token)
 
     def get_parser(self):
