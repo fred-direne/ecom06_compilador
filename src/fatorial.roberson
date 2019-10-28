@@ -1,0 +1,13 @@
+int n;
+print("Digite o número para o cálculo fatorial:");
+read(n);
+
+int r = 1;
+int i;
+for(i = 1; i <= n; i = i + 1)
+begin
+    r = r * i;
+end;
+
+print("Fatorial = ");
+print(r);
