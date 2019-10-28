@@ -1,15 +1,24 @@
 int ant1 = 0;
-int ant2 = 0;
+int ant2 = 1;
 int r = 0;
 
 int n;
+print("Digite o número desejado da sequência de fibonacci: ");
 read(n);
 
-int i = 0;
-for(i;i<n;i=i+1) begin
-    r = ant1 + ant2;
-    ant2 = ant1;
-    ant1 = r;
+print("Valor da sequência de fibonacci na posição ");
+print(n);
+print(" = ");
+if(n == 0) begin
+    print(0);
+end
+else begin
+    int i;
+    for(i = 1; i <= n; i = i + 1) begin
+        r = ant1 + ant2;
+        ant2 = ant1;
+        ant1 = r;
+    end;
+    print(r);
 end;
 
-print(r);
